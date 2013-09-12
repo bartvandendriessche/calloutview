@@ -786,7 +786,13 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
 			
 			return YES;
 		}
-		
+
+                if ([self.contentView isUserInteractionEnabled] &&
+                        [self.contentView pointInside:[self.contentView convertPoint:point fromView:self] withEvent:nil]) {
+
+                        return YES;
+                }
+
 		return [super pointInside:point withEvent:event];
 	}
 	
@@ -812,7 +818,8 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
 	if (gestureRecognizer == pressRecognizer) {
 		
 		if (([self.leftAccessoryView isKindOfClass:[UIControl class]] && CGRectContainsPoint(self.leftAccessoryView.frame, [touch locationInView:self])) ||
-			([self.rightAccessoryView isKindOfClass:[UIControl class]] && CGRectContainsPoint(self.rightAccessoryView.frame, [touch locationInView:self]))) {
+			([self.rightAccessoryView isKindOfClass:[UIControl class]] && CGRectContainsPoint(self.rightAccessoryView.frame, [touch locationInView:self])) ||
+                        (self.contentView.isUserInteractionEnabled && CGRectContainsPoint(self.contentView.frame, [touch locationInView:self]))) {
 			
 			return NO;
 		}
