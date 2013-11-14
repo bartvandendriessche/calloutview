@@ -63,9 +63,9 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
     UIImageView *leftCap, *rightCap, *topAnchor, *bottomAnchor, *leftBackground, *rightBackground;
     SMCalloutArrowDirection arrowDirection;
     BOOL popupCancelled;
-	
-	UIView *clippedView;
-	UILongPressGestureRecognizer *pressRecognizer;
+
+        UIView *clippedView;
+        UILongPressGestureRecognizer *pressRecognizer;
 }
 
 - (id)initWithFrame:(CGRect)frame {
@@ -73,13 +73,13 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
         _presentAnimation = SMCalloutAnimationBounce;
         _dismissAnimation = SMCalloutAnimationFade;
         self.backgroundColor = [UIColor clearColor];
-		self.shouldDrawiOS7UserInterface = [[UIView class] instancesRespondToSelector:@selector(tintColor)];
-		
-		if (self.shouldDrawiOS7UserInterface) {
-			self.shouldHightlightOnTouch = YES;
-		}
+                self.shouldDrawiOS7UserInterface = [[UIView class] instancesRespondToSelector:@selector(tintColor)];
+
+                if (self.shouldDrawiOS7UserInterface) {
+                        self.shouldHightlightOnTouch = YES;
+                }
     }
-	
+
     return self;
 }
 
@@ -87,8 +87,8 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
     if (self.titleView) {
         // if you have a custom title view defined, return that.
         return self.titleView;
-		
-	} else {
+
+        } else {
         if (!titleLabel) {
             // create a default titleView
             titleLabel = [UILabel new];
@@ -99,16 +99,16 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
             titleLabel.textColor = [UIColor whiteColor];
             titleLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.5];
             titleLabel.shadowOffset = CGSizeMake(0, -1);
-			
-			// set iOS 7 specific styles
-			if (self.shouldDrawiOS7UserInterface) {
-				titleLabel.textColor = [UIColor darkTextColor];
-				titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-				titleLabel.shadowColor = nil;
-				titleLabel.shadowOffset = CGSizeZero;
-			}
+
+                        // set iOS 7 specific styles
+                        if (self.shouldDrawiOS7UserInterface) {
+                                titleLabel.textColor = [UIColor darkTextColor];
+                                titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+                                titleLabel.shadowColor = nil;
+                                titleLabel.shadowOffset = CGSizeZero;
+                        }
         }
-		
+
         return titleLabel;
     }
 }
@@ -117,7 +117,7 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
     if (self.subtitleView) {
         // if you have a custom subtitle view defined, return that.
         return self.subtitleView;
-		
+
     } else {
         if (!subtitleLabel) {
             // create a default subtitleView
@@ -129,225 +129,225 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
             subtitleLabel.textColor = [UIColor whiteColor];
             subtitleLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.5];
             subtitleLabel.shadowOffset = CGSizeMake(0, -1);
-			
-			// set iOS 7 specific styles
-			if (self.shouldDrawiOS7UserInterface) {
-				subtitleLabel.textColor = [UIColor darkTextColor];
-				subtitleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
-				subtitleLabel.shadowColor = nil;
-				subtitleLabel.shadowOffset = CGSizeZero;
-			}
+
+                        // set iOS 7 specific styles
+                        if (self.shouldDrawiOS7UserInterface) {
+                                subtitleLabel.textColor = [UIColor darkTextColor];
+                                subtitleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
+                                subtitleLabel.shadowColor = nil;
+                                subtitleLabel.shadowOffset = CGSizeZero;
+                        }
         }
-		
+
         return subtitleLabel;
     }
 }
 
 - (SMCalloutBackgroundView *)backgroundView {
     // create our default background on first access only if it's nil, since you might have set your own background anyway.
-	
-	if (_backgroundView) {
-		return _backgroundView;
-	}
-	
-	if (self.shouldDrawiOS7UserInterface) {
-		_backgroundView = [[SMCalloutDrawnBackgroundView alloc] init];
-	
-	} else {
-		_backgroundView = [[SMCalloutDrawniOS6BackgroundView alloc] init];
-	}
-	
-	_backgroundView.shouldDrawiOS7UserInterface = self.shouldDrawiOS7UserInterface;
-	
+
+        if (_backgroundView) {
+                return _backgroundView;
+        }
+
+        if (self.shouldDrawiOS7UserInterface) {
+                _backgroundView = [[SMCalloutDrawnBackgroundView alloc] init];
+
+        } else {
+                _backgroundView = [[SMCalloutDrawniOS6BackgroundView alloc] init];
+        }
+
+        _backgroundView.shouldDrawiOS7UserInterface = self.shouldDrawiOS7UserInterface;
+
     return _backgroundView;
 }
 
 - (UIView*)clippedViewOrDefault {
-	if (self.shouldDrawiOS7UserInterface) {
-		if (!clippedView) {
-			clippedView = [[UIView alloc] init];
-			
-			clippedView.layer.cornerRadius = [SMCalloutBackgroundView cornerRadiusUsingiOS7Style:self.shouldDrawiOS7UserInterface];
-			clippedView.clipsToBounds = YES;
-		}
-		
-		return clippedView;
-	}
-	
-	return self;
+        if (self.shouldDrawiOS7UserInterface) {
+                if (!clippedView) {
+                        clippedView = [[UIView alloc] init];
+
+                        clippedView.layer.cornerRadius = [SMCalloutBackgroundView cornerRadiusUsingiOS7Style:self.shouldDrawiOS7UserInterface];
+                        clippedView.clipsToBounds = YES;
+                }
+
+                return clippedView;
+        }
+
+        return self;
 }
 
 - (void)setShouldHightlightOnTouch:(BOOL)shouldHightlightOnTouch {
-	if (_shouldHightlightOnTouch != shouldHightlightOnTouch) {
-		_shouldHightlightOnTouch = shouldHightlightOnTouch;
-		
-		if (shouldHightlightOnTouch) {
-			pressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(pressRecognized:)];
-			pressRecognizer.minimumPressDuration = 0;
-			pressRecognizer.allowableMovement = 44;
-			pressRecognizer.delegate = self;
-			
-			[self addGestureRecognizer:pressRecognizer];
-		
-		} else {
-			[self removeGestureRecognizer:pressRecognizer];
-		}
-	}
+        if (_shouldHightlightOnTouch != shouldHightlightOnTouch) {
+                _shouldHightlightOnTouch = shouldHightlightOnTouch;
+
+                if (shouldHightlightOnTouch) {
+                        pressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(pressRecognized:)];
+                        pressRecognizer.minimumPressDuration = 0;
+                        pressRecognizer.allowableMovement = 44;
+                        pressRecognizer.delegate = self;
+
+                        [self addGestureRecognizer:pressRecognizer];
+
+                } else {
+                        [self removeGestureRecognizer:pressRecognizer];
+                }
+        }
 }
 
 #pragma mark Presentation
 
 - (void)presentCalloutFromRect:(CGRect)rect
-						inView:(UIView *)view
-			 constrainedToView:(UIView *)constrainedView
-	  permittedArrowDirections:(SMCalloutArrowDirection)arrowDirections
-					  animated:(BOOL)animated {
-	
-	[self presentCalloutFromRect:rect
-						  inView:view
-			   constrainedToView:constrainedView
-					  withInsets:UIEdgeInsetsMake(-REPOSITION_MARGIN, -REPOSITION_MARGIN, -REPOSITION_MARGIN, -REPOSITION_MARGIN)
-		permittedArrowDirections:arrowDirections
-						animated:animated];
+                                                inView:(UIView *)view
+                         constrainedToView:(UIView *)constrainedView
+          permittedArrowDirections:(SMCalloutArrowDirection)arrowDirections
+                                          animated:(BOOL)animated {
+
+        [self presentCalloutFromRect:rect
+                                                  inView:view
+                           constrainedToView:constrainedView
+                                          withInsets:UIEdgeInsetsMake(-REPOSITION_MARGIN, -REPOSITION_MARGIN, -REPOSITION_MARGIN, -REPOSITION_MARGIN)
+                permittedArrowDirections:arrowDirections
+                                                animated:animated];
 }
 
 - (void)presentCalloutFromRect:(CGRect)rect
-						inView:(UIView *)view
-			 constrainedToView:(UIView *)constrainedView
-					withInsets:(UIEdgeInsets)constrainedInsets
-	  permittedArrowDirections:(SMCalloutArrowDirection)arrowDirections
-					  animated:(BOOL)animated {
-	
-	[self presentCalloutFromRect:rect
-						 inLayer:view.layer
-						  ofView:view
-			  constrainedToLayer:constrainedView.layer
-					  withInsets:constrainedInsets
-		permittedArrowDirections:arrowDirections
-						animated:animated];
+                                                inView:(UIView *)view
+                         constrainedToView:(UIView *)constrainedView
+                                        withInsets:(UIEdgeInsets)constrainedInsets
+          permittedArrowDirections:(SMCalloutArrowDirection)arrowDirections
+                                          animated:(BOOL)animated {
+
+        [self presentCalloutFromRect:rect
+                                                 inLayer:view.layer
+                                                  ofView:view
+                          constrainedToLayer:constrainedView.layer
+                                          withInsets:constrainedInsets
+                permittedArrowDirections:arrowDirections
+                                                animated:animated];
 }
 
 - (void)presentCalloutFromRect:(CGRect)rect
-					   inLayer:(CALayer *)layer
-			constrainedToLayer:(CALayer *)constrainedLayer
-	  permittedArrowDirections:(SMCalloutArrowDirection)arrowDirections
-					  animated:(BOOL)animated {
+                                           inLayer:(CALayer *)layer
+                        constrainedToLayer:(CALayer *)constrainedLayer
+          permittedArrowDirections:(SMCalloutArrowDirection)arrowDirections
+                                          animated:(BOOL)animated {
 
-	[self presentCalloutFromRect:rect
-						 inLayer:layer
-			  constrainedToLayer:constrainedLayer
-					  withInsets:UIEdgeInsetsMake(-REPOSITION_MARGIN, -REPOSITION_MARGIN, -REPOSITION_MARGIN, -REPOSITION_MARGIN)
-		permittedArrowDirections:arrowDirections
-						animated:animated];
+        [self presentCalloutFromRect:rect
+                                                 inLayer:layer
+                          constrainedToLayer:constrainedLayer
+                                          withInsets:UIEdgeInsetsMake(-REPOSITION_MARGIN, -REPOSITION_MARGIN, -REPOSITION_MARGIN, -REPOSITION_MARGIN)
+                permittedArrowDirections:arrowDirections
+                                                animated:animated];
 }
 
 - (void)presentCalloutFromRect:(CGRect)rect
-					   inLayer:(CALayer *)layer
-			constrainedToLayer:(CALayer *)constrainedLayer
-					withInsets:(UIEdgeInsets)constrainedInsets
-	  permittedArrowDirections:(SMCalloutArrowDirection)arrowDirections
-					  animated:(BOOL)animated {
-	
-	[self presentCalloutFromRect:rect
-						 inLayer:layer
-						  ofView:nil
-			  constrainedToLayer:constrainedLayer
-					  withInsets:constrainedInsets
-		permittedArrowDirections:arrowDirections
-						animated:animated];
+                                           inLayer:(CALayer *)layer
+                        constrainedToLayer:(CALayer *)constrainedLayer
+                                        withInsets:(UIEdgeInsets)constrainedInsets
+          permittedArrowDirections:(SMCalloutArrowDirection)arrowDirections
+                                          animated:(BOOL)animated {
+
+        [self presentCalloutFromRect:rect
+                                                 inLayer:layer
+                                                  ofView:nil
+                          constrainedToLayer:constrainedLayer
+                                          withInsets:constrainedInsets
+                permittedArrowDirections:arrowDirections
+                                                animated:animated];
 }
 
 // this private method handles both CALayer and UIView parents depending on what's passed.
 - (void)presentCalloutFromRect:(CGRect)rect
-					   inLayer:(CALayer *)layer
-						ofView:(UIView *)view
-			constrainedToLayer:(CALayer *)constrainedLayer
-					withInsets:(UIEdgeInsets)constrainedInsets
-	  permittedArrowDirections:(SMCalloutArrowDirection)arrowDirections
-					  animated:(BOOL)animated {
-    
+                                           inLayer:(CALayer *)layer
+                                                ofView:(UIView *)view
+                        constrainedToLayer:(CALayer *)constrainedLayer
+                                        withInsets:(UIEdgeInsets)constrainedInsets
+          permittedArrowDirections:(SMCalloutArrowDirection)arrowDirections
+                                          animated:(BOOL)animated {
+
     // Sanity check: dismiss this callout immediately if it's displayed somewhere
     if (self.layer.superlayer) [self dismissCalloutAnimated:NO];
-	
-	
-	// a quick hack to make sure iOS 7 doesn't draw the arrow under a left accessory
-	// this makes sure we don't have to deal with extending a view with a background color into the arrow
-	if (self.shouldDrawiOS7UserInterface) {
-		constrainedInsets = UIEdgeInsetsMake(constrainedInsets.top,
-											 MIN(-ANCHOR_MARGIN_MIN - CGRectGetWidth(self.leftAccessoryView.bounds), constrainedInsets.left),
-											 constrainedInsets.bottom,
-											 constrainedInsets.right);
-	}
-    
+
+
+        // a quick hack to make sure iOS 7 doesn't draw the arrow under a left accessory
+        // this makes sure we don't have to deal with extending a view with a background color into the arrow
+        if (self.shouldDrawiOS7UserInterface) {
+                constrainedInsets = UIEdgeInsetsMake(constrainedInsets.top,
+                                                                                         MIN(-ANCHOR_MARGIN_MIN - CGRectGetWidth(self.leftAccessoryView.bounds), constrainedInsets.left),
+                                                                                         constrainedInsets.bottom,
+                                                                                         constrainedInsets.right);
+        }
+
     // figure out the constrained view's rect in our popup view's coordinate system
     CGRect constrainedRect = [constrainedLayer convertRect:constrainedLayer.bounds toLayer:layer];
-    
+
     // form our subviews based on our content set so far
     [self rebuildSubviews];
-    
+
     // apply title/subtitle (if present
     titleLabel.text = self.title;
     subtitleLabel.text = self.subtitle;
-    
+
     // size the callout to fit the width constraint as best as possible
     self.$size = [self sizeThatFits:CGSizeMake(constrainedRect.size.width, self.calloutHeight)];
-    
+
     // how much room do we have in the constraint box, both above and below our target rect?
     CGFloat topSpace = CGRectGetMinY(rect) - CGRectGetMinY(constrainedRect);
     CGFloat bottomSpace = CGRectGetMaxY(constrainedRect) - CGRectGetMaxY(rect);
-    
+
     // we prefer to point our arrow down.
     SMCalloutArrowDirection bestDirection = SMCalloutArrowDirectionDown;
-    
+
     // we'll point it up though if that's the only option you gave us.
     if (arrowDirections == SMCalloutArrowDirectionUp)
         bestDirection = SMCalloutArrowDirectionUp;
-    
+
     // or, if we don't have enough space on the top and have more space on the bottom, and you
     // gave us a choice, then pointing up is the better option.
     if (arrowDirections == SMCalloutArrowDirectionAny && topSpace < self.calloutHeight && bottomSpace > topSpace)
         bestDirection = SMCalloutArrowDirectionUp;
-    
+
     // show the correct anchor based on our decision
     topAnchor.hidden = (bestDirection == SMCalloutArrowDirectionDown);
     bottomAnchor.hidden = (bestDirection == SMCalloutArrowDirectionUp);
     arrowDirection = bestDirection;
-    
+
     // we want to point directly at the horizontal center of the given rect. calculate our "anchor point" in terms of our
     // target view's coordinate system. make sure to offset the anchor point as requested if necessary.
     CGFloat anchorX = self.calloutOffset.x + CGRectGetMidX(rect);
     CGFloat anchorY = self.calloutOffset.y + (bestDirection == SMCalloutArrowDirectionDown ? CGRectGetMinY(rect) : CGRectGetMaxY(rect));
-    
+
     // we prefer to sit in the exact center of our constrained view, so we have visually pleasing equal left/right margins.
     CGFloat calloutX = roundf(CGRectGetMidX(constrainedRect) - self.$width / 2);
-    
+
     // what's the farthest to the left and right that we could point to, given our background image constraints?
     CGFloat minPointX = calloutX + [self layoutLeftAnchorMargin];
     CGFloat maxPointX = calloutX + self.$width - [self layoutRightAnchorMargin];
-    
+
     // we may need to scoot over to the left or right to point at the correct spot
     CGFloat adjustX = 0;
     if (anchorX < minPointX) adjustX = anchorX - minPointX;
     if (anchorX > maxPointX) adjustX = anchorX - maxPointX;
-    
+
     // add the callout to the given layer (or view if possible, to receive touch events)
     if (view)
         [view addSubview:self];
     else
         [layer addSublayer:self.layer];
-    
+
     CGPoint calloutOrigin = {
         .x = calloutX + adjustX,
         .y = bestDirection == SMCalloutArrowDirectionDown ? (anchorY - self.calloutHeight + [self layoutBottomAnchorMargin]) : anchorY
     };
-    
+
     _currentArrowDirection = bestDirection;
-    
+
     self.$origin = calloutOrigin;
-    
+
     // now set the *actual* anchor point for our layer so that our "popup" animation starts from this point.
     CGPoint anchorPoint = [layer convertPoint:CGPointMake(anchorX, anchorY) toLayer:self.layer];
-    
+
     // pass on the anchor point to our background view so it knows where to draw the arrow
     self.backgroundView.arrowPoint = anchorPoint;
 
@@ -355,46 +355,46 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
     anchorPoint.x /= self.$width;
     anchorPoint.y /= self.$height;
     self.layer.anchorPoint = anchorPoint;
-    
+
     // setting the anchor point moves the view a bit, so we need to reset
     self.$origin = calloutOrigin;
-    
+
     // make sure our frame is not on half-pixels or else we may be blurry!
     self.frame = CGRectIntegral(self.frame);
 
     // layout now so we can immediately start animating to the final position if needed
     [self setNeedsLayout];
     [self layoutIfNeeded];
-    
+
     // if we're outside the bounds of our constraint rect, we'll give our delegate an opportunity to shift us into position.
     // consider both our size and the size of our target rect (which we'll assume to be the size of the content you want to scroll into view.
-	CGRect contentRect = CGRectUnion(self.frame, UIEdgeInsetsInsetRect(rect, constrainedInsets));
+        CGRect contentRect = CGRectUnion(self.frame, UIEdgeInsetsInsetRect(rect, constrainedInsets));
 
     CGSize offset = [self offsetToContainRect:contentRect inRect:constrainedRect];
-    	
+
     NSTimeInterval delay = 0;
     popupCancelled = NO; // reset this before calling our delegate below
-    
+
     if ([self.delegate respondsToSelector:@selector(calloutView:delayForRepositionWithSize:)] && !CGSizeEqualToSize(offset, CGSizeZero))
         delay = [self.delegate calloutView:self delayForRepositionWithSize:offset];
-    
+
     // there's a chance that user code in the delegate method may have called -dismissCalloutAnimated to cancel things; if that
     // happened then we need to bail!
     if (popupCancelled) return;
-    
+
     // if we need to delay, we don't want to be visible while we're delaying, so hide us in preparation for our popup
     self.hidden = YES;
-    
+
     // create the appropriate animation, even if we're not animated
     CAAnimation *animation = [self animationWithType:self.presentAnimation presenting:YES];
-    
+
     // nuke the duration if no animation requested - we'll still need to "run" the animation to get delays and callbacks
     if (!animated)
         animation.duration = 0.0000001; // can't be zero or the animation won't "run"
-    
+
     animation.beginTime = CACurrentMediaTime() + delay;
     animation.delegate = self;
-    
+
     [self.layer addAnimation:animation forKey:@"present"];
 }
 
@@ -407,7 +407,7 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
     if (presenting) {
         if ([_delegate respondsToSelector:@selector(calloutViewWillAppear:)])
             [_delegate calloutViewWillAppear:self];
-        
+
         // ok, animation is on, let's make ourselves visible!
         self.hidden = NO;
     }
@@ -419,13 +419,13 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
 
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)finished {
     BOOL presenting = [[anim valueForKey:@"presenting"] boolValue];
-    
+
     if (presenting) {
         if ([_delegate respondsToSelector:@selector(calloutViewDidAppear:)])
             [_delegate calloutViewDidAppear:self];
     }
     else if (!presenting) {
-        
+
         [self removeFromParent];
         [self.layer removeAnimationForKey:@"dismiss"];
 
@@ -436,9 +436,9 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
 
 - (void)dismissCalloutAnimated:(BOOL)animated {
     [self.layer removeAnimationForKey:@"present"];
-    
+
     popupCancelled = YES;
-    
+
     if (animated) {
         CAAnimation *animation = [self animationWithType:self.dismissAnimation presenting:NO];
         animation.delegate = self;
@@ -449,19 +449,19 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
 
 - (CAAnimation *)animationWithType:(SMCalloutAnimation)type presenting:(BOOL)presenting {
     CAAnimation *animation = nil;
-    
+
     if (type == SMCalloutAnimationBounce) {
         CAKeyframeAnimation *bounceAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale"];
         CAMediaTimingFunction *easeInOut = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-        
+
         bounceAnimation.values = @[@0.05, @1.11245, @0.951807, @1.0];
         bounceAnimation.keyTimes = @[@0, @(4.0/9.0), @(4.0/9.0+5.0/18.0), @1.0];
         bounceAnimation.duration = 1.0/3.0; // the official bounce animation duration adds up to 0.3 seconds; but there is a bit of delay introduced by Apple using a sequence of callback-based CABasicAnimations rather than a single CAKeyframeAnimation. So we bump it up to 0.33333 to make it feel identical on the device
         bounceAnimation.timingFunctions = @[easeInOut, easeInOut, easeInOut, easeInOut];
-        
+
         if (!presenting)
             bounceAnimation.values = [[bounceAnimation.values reverseObjectEnumerator] allObjects]; // reverse values
-        
+
         animation = bounceAnimation;
     }
     else if (type == SMCalloutAnimationFade) {
@@ -478,10 +478,10 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
         stretchAnimation.toValue = presenting ? @1.0 : @0.0;
         animation = stretchAnimation;
     }
-    
+
     // CAAnimation is KVC compliant, so we can store whether we're presenting for lookup in our delegate methods
     [animation setValue:@(presenting) forKey:@"presenting"];
-    
+
     animation.fillMode = kCAFillModeForwards;
     animation.removedOnCompletion = NO;
     return animation;
@@ -525,21 +525,21 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
     // remove and re-add our appropriate subviews in the appropriate order
     [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     [self setNeedsDisplay];
-    
+
     [self addSubview:self.backgroundView];
-    
-	if ([self clippedViewOrDefault] != self) {
-		[self addSubview:[self clippedViewOrDefault]];
-	}
-	
+
+        if ([self clippedViewOrDefault] != self) {
+                [self addSubview:[self clippedViewOrDefault]];
+        }
+
     if (self.contentView) {
         [[self clippedViewOrDefault] addSubview:self.contentView];
-		
+
     } else {
         if (self.titleViewOrDefault) [[self clippedViewOrDefault] addSubview:self.titleViewOrDefault];
         if (self.subtitleViewOrDefault) [[self clippedViewOrDefault] addSubview:self.subtitleViewOrDefault];
     }
-	
+
     if (self.leftAccessoryView) [[self clippedViewOrDefault] addSubview:self.leftAccessoryView];
     if (self.rightAccessoryView) [[self clippedViewOrDefault] addSubview:self.rightAccessoryView];
 }
@@ -547,41 +547,41 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
 - (CGFloat)calloutHeight {
     if (self.contentView) {
         return self.contentView.$height + TITLE_TOP*2 + ANCHOR_HEIGHT + [self layoutBottomAnchorMargin];
-		
+
     } else {
         return [self layoutDefaultHeight];
-	}
+        }
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
-    
+
     // odd behavior, but mimicking the system callout view
     if (size.width < CALLOUT_DEFAULT_MIN_WIDTH)
         return CGSizeMake(CALLOUT_DEFAULT_WIDTH, self.calloutHeight);
-    
+
     // calculate how much non-negotiable space we need to reserve for margin and accessories
     CGFloat margin = self.layoutInnerContentMarginLeft + self.layoutInnerContentMarginRight;
-    
+
     // how much room is left for text?
     CGFloat availableWidthForText = size.width - margin;
-	
+
     // no room for text? then we'll have to squeeze into the given size somehow.
     if (availableWidthForText < 0)
         availableWidthForText = 0;
-	
+
     CGSize preferredTitleSize = [self.titleViewOrDefault sizeThatFits:CGSizeMake(availableWidthForText, TITLE_HEIGHT)];
     CGSize preferredSubtitleSize = [self.subtitleViewOrDefault sizeThatFits:CGSizeMake(availableWidthForText, SUBTITLE_HEIGHT)];
-    
+
     // total width we'd like
     CGFloat preferredWidth;
-    
+
     if (self.contentView) {
-        
+
         // if we have a content view, then take our preferred size directly from that
         preferredWidth = self.contentView.$width + margin;
     }
     else if (preferredTitleSize.width >= 0.000001 || preferredSubtitleSize.width >= 0.000001) {
-        
+
         // if we have a title or subtitle, then our assumed margins are valid, and we can apply them
         preferredWidth = fmaxf(preferredTitleSize.width, preferredSubtitleSize.width) + margin;
     }
@@ -589,55 +589,55 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
         // ok we have no title or subtitle to speak of. In this case, the system callout would actually not display
         // at all! But we can handle it.
         preferredWidth = self.leftAccessoryView.$width + self.rightAccessoryView.$width + [self layoutLeftAccessoryMarginWidth] + [self layoutRightAccessoryMarginWidth];
-        
+
         if (self.leftAccessoryView && self.rightAccessoryView)
             preferredWidth += BETWEEN_ACCESSORIES_MARGIN;
     }
-    
+
     // ensure we're big enough to fit our graphics!
     preferredWidth = fmaxf(preferredWidth, CALLOUT_DEFAULT_MIN_WIDTH);
-    
+
     // ask to be smaller if we have space, otherwise we'll fit into what we have by truncating the title/subtitle.
     return CGSizeMake(fminf(preferredWidth, size.width), self.calloutHeight);
 }
 
 - (void)layoutSubviews {
     self.backgroundView.frame = self.bounds;
-    
+
     // if we're pointing up, we'll need to push almost everything down a bit
     CGFloat dy = arrowDirection == SMCalloutArrowDirectionUp ? TOP_ANCHOR_MARGIN : 0;
-	
-	if (self.shouldDrawiOS7UserInterface) {
-		clippedView.frame = CGRectMake(0,
-									   dy,
-									   CGRectGetWidth(self.bounds),
-									   CGRectGetHeight(self.bounds) - ANCHOR_HEIGHT - [self layoutBottomAnchorMargin] - OFFSET_FROM_ORIGIN);
-		
-		self.leftAccessoryView.$height = CGRectGetHeight(clippedView.bounds);
-		self.rightAccessoryView.$height = CGRectGetHeight(clippedView.bounds);
-	}
-    
+
+        if (self.shouldDrawiOS7UserInterface) {
+                clippedView.frame = CGRectMake(0,
+                                                                           dy,
+                                                                           CGRectGetWidth(self.bounds),
+                                                                           CGRectGetHeight(self.bounds) - ANCHOR_HEIGHT - [self layoutBottomAnchorMargin] - OFFSET_FROM_ORIGIN);
+
+                self.leftAccessoryView.$height = CGRectGetHeight(clippedView.bounds);
+                self.rightAccessoryView.$height = CGRectGetHeight(clippedView.bounds);
+        }
+
     self.titleViewOrDefault.$x = self.layoutInnerContentMarginLeft;
     self.titleViewOrDefault.$y = (self.subtitleView || self.subtitle.length ? TITLE_SUB_TOP : TITLE_TOP) + dy;
     self.titleViewOrDefault.$width = self.$width - self.layoutInnerContentMarginLeft - self.layoutInnerContentMarginRight;
-    
+
     self.subtitleViewOrDefault.$x = self.titleViewOrDefault.$x;
     self.subtitleViewOrDefault.$y = SUBTITLE_TOP + dy;
     self.subtitleViewOrDefault.$width = self.titleViewOrDefault.$width;
-	   
+
     self.leftAccessoryView.$x = [self layoutLeftAccessoryMarginWidth];
     if (self.contentView)
         self.leftAccessoryView.$y = TITLE_TOP + [self centeredPositionOfView:self.leftAccessoryView relativeToView:self.contentView] + dy;
     else
         self.leftAccessoryView.$y = [self layoutAccessoryYOrigin] + [self centeredPositionOfView:self.leftAccessoryView ifSmallerThan:ACCESSORY_HEIGHT] + dy;
-    
+
     self.rightAccessoryView.$x = self.$width-[self layoutRightAccessoryMarginWidth]-self.rightAccessoryView.$width;
     if (self.contentView)
         self.rightAccessoryView.$y = TITLE_TOP + [self centeredPositionOfView:self.rightAccessoryView relativeToView:self.contentView] + dy;
     else
         self.rightAccessoryView.$y = [self layoutAccessoryYOrigin] + [self centeredPositionOfView:self.rightAccessoryView ifSmallerThan:ACCESSORY_HEIGHT] + dy;
-    
-    
+
+
     if (self.contentView) {
         self.contentView.$x = self.layoutInnerContentMarginLeft;
         self.contentView.$y = TITLE_TOP + dy;
@@ -651,58 +651,58 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
  * The smallest possible distance from the edge of our control to the "tip" of the anchor from the left.
  */
 - (CGFloat)layoutLeftAnchorMargin {
-	CGFloat margin = 37.0f;
-	
-	if (self.shouldDrawiOS7UserInterface) {
-		// adding the left accessory width ensures we won't display the arrow where the background color of the accessory should be
-		margin = MAX(CGRectGetWidth(self.leftAccessoryView.bounds) + 20, margin);
-	}
+        CGFloat margin = 37.0f;
 
-	return margin;
+        if (self.shouldDrawiOS7UserInterface) {
+                // adding the left accessory width ensures we won't display the arrow where the background color of the accessory should be
+                margin = MAX(CGRectGetWidth(self.leftAccessoryView.bounds) + 20, margin);
+        }
+
+        return margin;
 }
 
 /**
  * The smallest possible distance from the edge of our control to the "tip" of the anchor from the right.
  */
 - (CGFloat)layoutRightAnchorMargin {
-	return 37.0f;
+        return 37.0f;
 }
 
 - (CGFloat)layoutDefaultHeight {
-	if (self.shouldDrawiOS7UserInterface) {
-		return 62;
-	}
-	
-	return 70;
+        if (self.shouldDrawiOS7UserInterface) {
+                return 62;
+        }
+
+        return 70;
 }
 
 - (CGFloat)layoutInnerContentMarginLeft {
     if (self.leftAccessoryView) {
         return [self layoutLeftAccessoryMarginWidth] + self.leftAccessoryView.$width + [self layoutTitleAccessoryMargin];
-		
+
     } else {
         return [self layoutTitleMargin];
-	}
+        }
 }
 
 - (CGFloat)layoutInnerContentMarginRight {
     if (self.rightAccessoryView) {
         return [self layoutRightAccessoryMarginWidth] + self.rightAccessoryView.$width + [self layoutTitleAccessoryMargin];
-		
+
     } else {
         return [self layoutTitleMargin];
-	}
+        }
 }
 
 /**
  * The margin between the title and an accessory if one is present (on either side).
  */
 - (CGFloat)layoutTitleAccessoryMargin {
-	if (self.shouldDrawiOS7UserInterface) {
-		return 12.0f;
-	}
-	
-	return 6.0f;
+        if (self.shouldDrawiOS7UserInterface) {
+                return 12.0f;
+        }
+
+        return 6.0f;
 }
 
 /**
@@ -713,11 +713,11 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
  * @return the margin width for the current style
  */
 - (CGFloat)layoutLeftAccessoryMarginWidth {
-	if (self.shouldDrawiOS7UserInterface) {
-		return 0.0f;
-	}
-	
-	return 14.0f;
+        if (self.shouldDrawiOS7UserInterface) {
+                return 0.0f;
+        }
+
+        return 14.0f;
 }
 
 /**
@@ -726,7 +726,7 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
  * @return the margin width for the current style
  */
 - (CGFloat)layoutRightAccessoryMarginWidth {
-	return 14.0f;
+        return 14.0f;
 }
 
 /**
@@ -737,55 +737,55 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
  * @return the margin width for the current style
  */
 - (CGFloat)layoutAccessoryYOrigin {
-	if (self.shouldDrawiOS7UserInterface) {
-		return 0.0f;
-	}
-	
-	return 8.0f;
+        if (self.shouldDrawiOS7UserInterface) {
+                return 0.0f;
+        }
+
+        return 8.0f;
 }
 
 /**
  * If using a bottom anchor, we'll need to account for the shadow below the "tip".
  */
 - (CGFloat)layoutBottomAnchorMargin {
-	if (self.shouldDrawiOS7UserInterface) {
-		return 5.0f;
-	}
+        if (self.shouldDrawiOS7UserInterface) {
+                return 5.0f;
+        }
 
-	return 10.0f;
+        return 10.0f;
 }
 
 /**
  * The title view's normal horizontal margin from the edges of our callout view.
  */
 - (CGFloat)layoutTitleMargin {
-	if (self.shouldDrawiOS7UserInterface) {
-		return 12.0f;
-	}
-	
-	return 17.0f;
+        if (self.shouldDrawiOS7UserInterface) {
+                return 12.0f;
+        }
+
+        return 17.0f;
 }
 
 
 #pragma mark Hit testing
 
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
-	/*
-	 * On iOS 7, the user is allowed to touch the callout but we'll ignore touches inside accessories that inheirit from UIControl.
-	 */
-	if (self.shouldDrawiOS7UserInterface) {
-		
-		if ([self.leftAccessoryView isKindOfClass:[UIControl class]] &&
-			[self.leftAccessoryView pointInside:[self.leftAccessoryView convertPoint:point fromView:self] withEvent:nil]) {
-			
-			return YES;
-		}
-		
-		if ([self.rightAccessoryView isKindOfClass:[UIControl class]] &&
-			[self.rightAccessoryView pointInside:[self.rightAccessoryView convertPoint:point fromView:self] withEvent:nil]) {
-			
-			return YES;
-		}
+        /*
+         * On iOS 7, the user is allowed to touch the callout but we'll ignore touches inside accessories that inheirit from UIControl.
+         */
+        if (self.shouldDrawiOS7UserInterface) {
+
+                if ([self.leftAccessoryView isKindOfClass:[UIControl class]] &&
+                        [self.leftAccessoryView pointInside:[self.leftAccessoryView convertPoint:point fromView:self] withEvent:nil]) {
+
+                        return YES;
+                }
+
+                if ([self.rightAccessoryView isKindOfClass:[UIControl class]] &&
+                        [self.rightAccessoryView pointInside:[self.rightAccessoryView convertPoint:point fromView:self] withEvent:nil]) {
+
+                        return YES;
+                }
 
                 if ([self.contentView isUserInteractionEnabled] &&
                         [self.contentView pointInside:[self.contentView convertPoint:point fromView:self] withEvent:nil]) {
@@ -793,85 +793,85 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
                         return YES;
                 }
 
-		return [super pointInside:point withEvent:event];
-	}
-	
+                return [super pointInside:point withEvent:event];
+        }
+
     /*
-	 * On iOS 6, we want to match the system callout view, which doesn't "capture" touches outside the accessory areas.
-	 * This way you can click on other pins and things *behind* a translucent callout.
-	 */
-    return	[self.leftAccessoryView pointInside:[self.leftAccessoryView convertPoint:point fromView:self] withEvent:nil] ||
-			[self.rightAccessoryView pointInside:[self.rightAccessoryView convertPoint:point fromView:self] withEvent:nil] ||
-			[self.contentView pointInside:[self.contentView convertPoint:point fromView:self] withEvent:nil] ||
-			(!self.contentView && [self.titleView pointInside:[self.titleView convertPoint:point fromView:self] withEvent:nil]) ||
-			(!self.contentView && [self.subtitleView pointInside:[self.subtitleView convertPoint:point fromView:self] withEvent:nil]);
+         * On iOS 6, we want to match the system callout view, which doesn't "capture" touches outside the accessory areas.
+         * This way you can click on other pins and things *behind* a translucent callout.
+         */
+    return      [self.leftAccessoryView pointInside:[self.leftAccessoryView convertPoint:point fromView:self] withEvent:nil] ||
+                        [self.rightAccessoryView pointInside:[self.rightAccessoryView convertPoint:point fromView:self] withEvent:nil] ||
+                        [self.contentView pointInside:[self.contentView convertPoint:point fromView:self] withEvent:nil] ||
+                        (!self.contentView && [self.titleView pointInside:[self.titleView convertPoint:point fromView:self] withEvent:nil]) ||
+                        (!self.contentView && [self.subtitleView pointInside:[self.subtitleView convertPoint:point fromView:self] withEvent:nil]);
 }
 
 
 #pragma mark UIGestureRecognizerDelegate
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
-	return (gestureRecognizer != pressRecognizer && otherGestureRecognizer != pressRecognizer);
+        return (gestureRecognizer != pressRecognizer && otherGestureRecognizer != pressRecognizer);
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
-	if (gestureRecognizer == pressRecognizer) {
-		
-		if (([self.leftAccessoryView isKindOfClass:[UIControl class]] && CGRectContainsPoint(self.leftAccessoryView.frame, [touch locationInView:self])) ||
-			([self.rightAccessoryView isKindOfClass:[UIControl class]] && CGRectContainsPoint(self.rightAccessoryView.frame, [touch locationInView:self])) ||
+        if (gestureRecognizer == pressRecognizer) {
+
+                if (([self.leftAccessoryView isKindOfClass:[UIControl class]] && CGRectContainsPoint(self.leftAccessoryView.frame, [touch locationInView:self])) ||
+                        ([self.rightAccessoryView isKindOfClass:[UIControl class]] && CGRectContainsPoint(self.rightAccessoryView.frame, [touch locationInView:self])) ||
                         (self.contentView.isUserInteractionEnabled && CGRectContainsPoint(self.contentView.frame, [touch locationInView:self]))) {
-			
-			return NO;
-		}
-	}
-	
-	return YES;
+
+                        return NO;
+                }
+        }
+
+        return YES;
 }
 
 - (void)pressRecognized:(UILongPressGestureRecognizer*)recognizer {
-	switch (recognizer.state) {
-		case UIGestureRecognizerStateBegan:
-			self.backgroundView.selected = YES;
-			break;
-			
-		case UIGestureRecognizerStateCancelled:
-		case UIGestureRecognizerStateFailed:
-			self.backgroundView.selected = NO;
-			break;
-			
-		case UIGestureRecognizerStateEnded:
-			self.backgroundView.selected = NO;
+        switch (recognizer.state) {
+                case UIGestureRecognizerStateBegan:
+                        self.backgroundView.selected = YES;
+                        break;
 
-			// only trigger the delegate if we ended without our bounds
-			if (CGRectContainsPoint(CGRectInset(self.bounds, -44, -44), [recognizer locationInView:self])) {
-				if ([self.delegate respondsToSelector:@selector(calloutViewWasSelected:)]) {
-					[self.delegate calloutViewWasSelected:self];
-				}
-			}
-			
-			break;
-			
-		case UIGestureRecognizerStateChanged: {
-			// see if the user's finger has moved more than 44px away
-			if (CGRectContainsPoint(CGRectInset(self.bounds, -44, -44), [recognizer locationInView:self])) {
-				
-				if (self.backgroundView.selected == NO) {
-					self.backgroundView.selected = YES;
-				}
-			
-			} else {
-				
-				if (self.backgroundView.selected == YES) {
-					self.backgroundView.selected = NO;
-				}
-				
-			}
-		}
-			
-			
-		default:
-			break;
-	}
+                case UIGestureRecognizerStateCancelled:
+                case UIGestureRecognizerStateFailed:
+                        self.backgroundView.selected = NO;
+                        break;
+
+                case UIGestureRecognizerStateEnded:
+                        self.backgroundView.selected = NO;
+
+                        // only trigger the delegate if we ended without our bounds
+                        if (CGRectContainsPoint(CGRectInset(self.bounds, -44, -44), [recognizer locationInView:self])) {
+                                if ([self.delegate respondsToSelector:@selector(calloutViewWasSelected:)]) {
+                                        [self.delegate calloutViewWasSelected:self];
+                                }
+                        }
+
+                        break;
+
+                case UIGestureRecognizerStateChanged: {
+                        // see if the user's finger has moved more than 44px away
+                        if (CGRectContainsPoint(CGRectInset(self.bounds, -44, -44), [recognizer locationInView:self])) {
+
+                                if (self.backgroundView.selected == NO) {
+                                        self.backgroundView.selected = YES;
+                                }
+
+                        } else {
+
+                                if (self.backgroundView.selected == YES) {
+                                        self.backgroundView.selected = NO;
+                                }
+
+                        }
+                }
+
+
+                default:
+                        break;
+        }
 }
 
 @end
@@ -893,88 +893,15 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
 }
 
 + (CGFloat)cornerRadiusUsingiOS7Style:(BOOL)shouldDrawiOS7UserInterface {
-	if (shouldDrawiOS7UserInterface) {
-		return 7.5;
-	}
-	
-	return [UIScreen mainScreen].scale == 1 ? 4.5 : 6.0;
+        if (shouldDrawiOS7UserInterface) {
+                return 7.5;
+        }
+
+        return [UIScreen mainScreen].scale == 1 ? 4.5 : 6.0;
 }
 
 + (NSData *)dataWithBase64EncodedString:(NSString *)string {
-    //
-    //  NSData+Base64.m
-    //
-    //  Version 1.0.2
-    //
-    //  Created by Nick Lockwood on 12/01/2012.
-    //  Copyright (C) 2012 Charcoal Design
-    //
-    //  Distributed under the permissive zlib License
-    //  Get the latest version from here:
-    //
-    //  https://github.com/nicklockwood/Base64
-    //
-    //  This software is provided 'as-is', without any express or implied
-    //  warranty.  In no event will the authors be held liable for any damages
-    //  arising from the use of this software.
-    //
-    //  Permission is granted to anyone to use this software for any purpose,
-    //  including commercial applications, and to alter it and redistribute it
-    //  freely, subject to the following restrictions:
-    //
-    //  1. The origin of this software must not be misrepresented; you must not
-    //  claim that you wrote the original software. If you use this software
-    //  in a product, an acknowledgment in the product documentation would be
-    //  appreciated but is not required.
-    //
-    //  2. Altered source versions must be plainly marked as such, and must not be
-    //  misrepresented as being the original software.
-    //
-    //  3. This notice may not be removed or altered from any source distribution.
-    //
-    const char lookup[] = {
-        99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99,
-        99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99,
-        99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 62, 99, 99, 99, 63,
-        52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 99, 99, 99, 99, 99, 99,
-        99,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,
-        15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 99, 99, 99, 99, 99,
-        99, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
-        41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 99, 99, 99, 99, 99
-    };
-    
-    NSData *inputData = [string dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-    long long inputLength = [inputData length];
-    const unsigned char *inputBytes = [inputData bytes];
-    
-    long long maxOutputLength = (inputLength / 4 + 1) * 3;
-    NSMutableData *outputData = [NSMutableData dataWithLength:maxOutputLength];
-    unsigned char *outputBytes = (unsigned char *)[outputData mutableBytes];
-    
-    int accumulator = 0;
-    long long outputLength = 0;
-    unsigned char accumulated[] = {0, 0, 0, 0};
-    for (long long i = 0; i < inputLength; i++) {
-        unsigned char decoded = lookup[inputBytes[i] & 0x7F];
-        if (decoded != 99) {
-            accumulated[accumulator] = decoded;
-            if (accumulator == 3) {
-                outputBytes[outputLength++] = (accumulated[0] << 2) | (accumulated[1] >> 4);
-                outputBytes[outputLength++] = (accumulated[1] << 4) | (accumulated[2] >> 2);
-                outputBytes[outputLength++] = (accumulated[2] << 6) | accumulated[3];
-            }
-            accumulator = (accumulator + 1) % 4;
-        }
-    }
-    
-    //handle left-over data
-    if (accumulator > 0) outputBytes[outputLength] = (accumulated[0] << 2) | (accumulated[1] >> 4);
-    if (accumulator > 1) outputBytes[++outputLength] = (accumulated[1] << 4) | (accumulated[2] >> 2);
-    if (accumulator > 2) outputLength++;
-    
-    //truncate data to match actual output length
-    outputData.length = outputLength;
-    return outputLength? outputData: nil;
+  return [[string dataUsingEncoding:NSUTF8StringEncoding] base64EncodedDataWithOptions:0];
 }
 
 
@@ -983,20 +910,20 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
 + (UIImage *)embeddedImageNamed:(NSString *)name {
     if ([UIScreen mainScreen].scale == 2)
         name = [name stringByAppendingString:@"$2x"];
-    
+
     SEL selector = NSSelectorFromString(name);
-    
+
     if (![(id)self respondsToSelector:selector]) {
         NSLog(@"Could not find an embedded image. Ensure that you've added a category method to UIImage named +%@", name);
         return nil;
     }
-    
+
     // We need to hush the compiler here - but we know what we're doing!
     #pragma clang diagnostic push
     #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
     NSString *base64String = [(id)self performSelector:selector];
     #pragma clang diagnostic pop
-    
+
     UIImage *rawImage = [UIImage imageWithData:[self dataWithBase64EncodedString:base64String]];
     return [UIImage imageWithCGImage:rawImage.CGImage scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
 }
@@ -1027,11 +954,11 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
  * @return the height of the top shadow buffer
  */
 - (CGFloat)layoutTopShadowBuffer {
-	if (self.shouldDrawiOS7UserInterface) {
-		return 0;
-	}
-	
-	return 2.0f;
+        if (self.shouldDrawiOS7UserInterface) {
+                return 0;
+        }
+
+        return 2.0f;
 }
 
 /**
@@ -1042,11 +969,11 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
  * @return the height of the bottom shadow buffer
  */
 - (CGFloat)layoutBottomShadowBuffer {
-	if (self.shouldDrawiOS7UserInterface) {
-		return 0;
-	}
-	
-	return 5.0f;
+        if (self.shouldDrawiOS7UserInterface) {
+                return 0;
+        }
+
+        return 5.0f;
 }
 
 @end
@@ -1075,7 +1002,7 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
         [self addSubview:leftBackground];
         [self addSubview:rightBackground];
     }
-	
+
     return self;
 }
 
@@ -1086,7 +1013,7 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
 }
 
 - (void)layoutSubviews {
-    
+
     // apply our background graphics
     leftCap.image = self.leftCapImage;
     rightCap.image = self.rightCapImage;
@@ -1094,7 +1021,7 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
     bottomAnchor.image = self.bottomAnchorImage;
     leftBackground.image = self.backgroundImage;
     rightBackground.image = self.backgroundImage;
-    
+
     // stretch the images to fill our vertical space. The system background images aren't really stretchable,
     // but that's OK because you'll probably be using title/subtitle rather than contentView if you're using the
     // system images, and in that case the height will match the system background heights exactly and no stretching
@@ -1113,20 +1040,20 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
     // if we're pointing up, we'll need to push almost everything down a bit
     CGFloat dy = pointingUp ? TOP_ANCHOR_MARGIN : 0;
     leftCap.$y = rightCap.$y = leftBackground.$y = rightBackground.$y = dy;
-    
+
     leftCap.$x = 0;
     rightCap.$x = self.$width - rightCap.$width;
-    
+
     // move both anchors, only one will have been made visible in our -popup method
     CGFloat anchorX = roundf(self.arrowPoint.x - bottomAnchor.$width / 2);
     topAnchor.$origin = CGPointMake(anchorX, 0);
-    
+
     // make sure the anchor graphic isn't overlapping with an endcap
     if (topAnchor.$left < leftCap.$right) topAnchor.$x = leftCap.$right;
     if (topAnchor.$right > rightCap.$left) topAnchor.$x = rightCap.$left - topAnchor.$width; // don't stretch it
-    
+
     bottomAnchor.$origin = topAnchor.$origin; // match
-    
+
     leftBackground.$left = leftCap.$right;
     leftBackground.$right = topAnchor.$left;
     rightBackground.$left = topAnchor.$right;
@@ -1149,112 +1076,112 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
         self.backgroundColor = [UIColor clearColor];
         self.opaque = NO;
     }
-	
+
     return self;
 }
 
 // Make sure we redraw our graphics when the arrow point changes!
 - (void)setArrowPoint:(CGPoint)arrowPoint {
     [super setArrowPoint:arrowPoint];
-	
+
     [self setNeedsDisplay];
 }
 
 - (void)setSelected:(BOOL)selected {
-	[super setSelected:selected];
-	
-	[self setNeedsDisplay];
+        [super setSelected:selected];
+
+        [self setNeedsDisplay];
 }
 
 - (void)drawRect:(CGRect)rect {
-	BOOL pointingUp = self.arrowPoint.y < self.$height/2;
+        BOOL pointingUp = self.arrowPoint.y < self.$height/2;
     CGSize anchorSize = CGSizeMake(27, ANCHOR_HEIGHT);
     CGFloat anchorX = roundf(self.arrowPoint.x - anchorSize.width / 2);
     CGRect anchorRect = CGRectMake(anchorX, 0, anchorSize.width, anchorSize.height);
-    
+
     // make sure the anchor is not too close to the end caps
     if (anchorRect.origin.x < ANCHOR_MARGIN_MIN) {
         anchorRect.origin.x = ANCHOR_MARGIN_MIN;
-		
+
     } else if (anchorRect.origin.x + anchorRect.size.width > self.$width - ANCHOR_MARGIN_MIN) {
         anchorRect.origin.x = self.$width - anchorRect.size.width - ANCHOR_MARGIN_MIN;
-	}
-    
+        }
+
     // determine size
     CGFloat radius = [[self class] cornerRadiusUsingiOS7Style:self.shouldDrawiOS7UserInterface];
-	CGFloat strokeWidth = 1.0f / [UIScreen mainScreen].scale;
+        CGFloat strokeWidth = 1.0f / [UIScreen mainScreen].scale;
 
     rect = CGRectMake(self.bounds.origin.x + strokeWidth/2,
-					  self.bounds.origin.y + [self layoutTopShadowBuffer],
-					  self.bounds.size.width - strokeWidth,
-					  self.bounds.size.height - ANCHOR_HEIGHT - strokeWidth - [self layoutTopShadowBuffer] - [self layoutBottomShadowBuffer] - OFFSET_FROM_ORIGIN);
-	
-	if (pointingUp) {
-		rect.origin.y += ANCHOR_HEIGHT - strokeWidth / 2.0;
-		
-	} else {
-		rect.origin.y += strokeWidth / 2.0;
-	}
-    
-    
+                                          self.bounds.origin.y + [self layoutTopShadowBuffer],
+                                          self.bounds.size.width - strokeWidth,
+                                          self.bounds.size.height - ANCHOR_HEIGHT - strokeWidth - [self layoutTopShadowBuffer] - [self layoutBottomShadowBuffer] - OFFSET_FROM_ORIGIN);
+
+        if (pointingUp) {
+                rect.origin.y += ANCHOR_HEIGHT - strokeWidth / 2.0;
+
+        } else {
+                rect.origin.y += strokeWidth / 2.0;
+        }
+
+
     // General Declarations
     CGContextRef context = UIGraphicsGetCurrentContext();
     UIColor *fillColor = [UIColor whiteColor];
-	UIColor *selectedFillColor = [UIColor colorWithWhite:0.85 alpha:1.0];
-	UIColor *strokeColor = [UIColor colorWithWhite:0 alpha:0.1];
+        UIColor *selectedFillColor = [UIColor colorWithWhite:0.85 alpha:1.0];
+        UIColor *strokeColor = [UIColor colorWithWhite:0 alpha:0.1];
     CGRect frame = rect;
-    
+
     //// CoreGroup ////
     {
         CGContextSaveGState(context);
         CGContextSetAlpha(context, 0.83);
         CGContextBeginTransparencyLayer(context, NULL);
-        
+
         // Background Drawing
         UIBezierPath* backgroundPath = [UIBezierPath bezierPath];
         [backgroundPath moveToPoint:CGPointMake(CGRectGetMinX(frame), CGRectGetMinY(frame) + radius)];
         [backgroundPath addLineToPoint:CGPointMake(CGRectGetMinX(frame), CGRectGetMaxY(frame) - radius)]; // left
         [backgroundPath addArcWithCenter:CGPointMake(CGRectGetMinX(frame) + radius, CGRectGetMaxY(frame) - radius) radius:radius startAngle:M_PI endAngle:M_PI / 2 clockwise:NO]; // bottom-left corner
-        
+
         // pointer down
         if (!pointingUp) {
             [backgroundPath addLineToPoint:CGPointMake(CGRectGetMinX(anchorRect), CGRectGetMaxY(frame))];
             [backgroundPath addLineToPoint:CGPointMake(CGRectGetMinX(anchorRect) + anchorRect.size.width / 2, CGRectGetMaxY(frame) + anchorRect.size.height)];
             [backgroundPath addLineToPoint:CGPointMake(CGRectGetMaxX(anchorRect), CGRectGetMaxY(frame))];
         }
-        
+
         [backgroundPath addLineToPoint:CGPointMake(CGRectGetMaxX(frame) - radius, CGRectGetMaxY(frame))]; // bottom
         [backgroundPath addArcWithCenter:CGPointMake(CGRectGetMaxX(frame) - radius, CGRectGetMaxY(frame) - radius) radius:radius startAngle:M_PI / 2 endAngle:0.0f clockwise:NO]; // bottom-right corner
         [backgroundPath addLineToPoint: CGPointMake(CGRectGetMaxX(frame), CGRectGetMinY(frame) + radius)]; // right
         [backgroundPath addArcWithCenter:CGPointMake(CGRectGetMaxX(frame) - radius, CGRectGetMinY(frame) + radius) radius:radius startAngle:0.0f endAngle:-M_PI / 2 clockwise:NO]; // top-right corner
-        
+
         // pointer up
         if (pointingUp) {
             [backgroundPath addLineToPoint:CGPointMake(CGRectGetMaxX(anchorRect), CGRectGetMinY(frame))];
             [backgroundPath addLineToPoint:CGPointMake(CGRectGetMinX(anchorRect) + anchorRect.size.width / 2, CGRectGetMinY(frame) - anchorRect.size.height)];
             [backgroundPath addLineToPoint:CGPointMake(CGRectGetMinX(anchorRect), CGRectGetMinY(frame))];
         }
-        
+
         [backgroundPath addLineToPoint:CGPointMake(CGRectGetMinX(frame) + radius, CGRectGetMinY(frame))]; // top
         [backgroundPath addArcWithCenter:CGPointMake(CGRectGetMinX(frame) + radius, CGRectGetMinY(frame) + radius) radius:radius startAngle:-M_PI / 2 endAngle:M_PI clockwise:NO]; // top-left corner
         [backgroundPath closePath];
         CGContextSaveGState(context);
-		
-		
-		// determine the appropriate background color
-		if (self.selected) {
-			[selectedFillColor setFill];
-			
-		} else {
-			[fillColor setFill];
-		}
-		
+
+
+                // determine the appropriate background color
+                if (self.selected) {
+                        [selectedFillColor setFill];
+
+                } else {
+                        [fillColor setFill];
+                }
+
         [backgroundPath fill];
-		
-		[strokeColor setStroke];
+
+                [strokeColor setStroke];
         backgroundPath.lineWidth = strokeWidth;
         [backgroundPath stroke];
-        
+
         CGContextEndTransparencyLayer(context);
         CGContextRestoreGState(context);
     }
@@ -1268,34 +1195,34 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
 @implementation SMCalloutDrawniOS6BackgroundView
 
 - (void)drawRect:(CGRect)rect {
-	
+
     BOOL pointingUp = self.arrowPoint.y < self.$height/2;
     CGSize anchorSize = CGSizeMake(27, ANCHOR_HEIGHT);
     CGFloat anchorX = roundf(self.arrowPoint.x - anchorSize.width / 2);
     CGRect anchorRect = CGRectMake(anchorX, 0, anchorSize.width, anchorSize.height);
-    
+
     // make sure the anchor is not too close to the end caps
     if (anchorRect.origin.x < ANCHOR_MARGIN_MIN)
         anchorRect.origin.x = ANCHOR_MARGIN_MIN;
-    
+
     else if (anchorRect.origin.x + anchorRect.size.width > self.$width - ANCHOR_MARGIN_MIN)
         anchorRect.origin.x = self.$width - anchorRect.size.width - ANCHOR_MARGIN_MIN;
-    
+
     // determine size
     CGFloat stroke = 1.0;
     CGFloat radius = [UIScreen mainScreen].scale == 1 ? 4.5 : 6.0;
-    
+
     rect = CGRectMake(self.bounds.origin.x, self.bounds.origin.y + [self layoutTopShadowBuffer], self.bounds.size.width, self.bounds.size.height - ANCHOR_HEIGHT);
     rect.size.width -= stroke + 14;
     rect.size.height -= stroke * 2 + [self layoutTopShadowBuffer] + [self layoutBottomShadowBuffer] + OFFSET_FROM_ORIGIN;
     rect.origin.x += stroke / 2.0 + 7;
     rect.origin.y += pointingUp ? ANCHOR_HEIGHT - stroke / 2.0 : stroke / 2.0;
-    
-    
+
+
     // General Declarations
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGContextRef context = UIGraphicsGetCurrentContext();
-    
+
     // Color Declarations
     UIColor* fillBlack = [UIColor colorWithRed: 0.11 green: 0.11 blue: 0.11 alpha: 1];
     UIColor* shadowBlack = [UIColor colorWithRed: 0 green: 0 blue: 0 alpha: 0.47];
@@ -1305,14 +1232,14 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
     UIColor* innerShadowColor = [UIColor colorWithRed: 1 green: 1 blue: 1 alpha: 0.4];
     UIColor* innerStrokeColor = [UIColor colorWithRed: 0.821 green: 0.821 blue: 0.821 alpha: 0.04];
     UIColor* outerStrokeColor = [UIColor colorWithRed: 0 green: 0 blue: 0 alpha: 0.35];
-    
+
     // Gradient Declarations
     NSArray* glossFillColors = [NSArray arrayWithObjects:
                                 (id)glossBottom.CGColor,
                                 (id)glossTop.CGColor, nil];
     CGFloat glossFillLocations[] = {0, 1};
     CGGradientRef glossFill = CGGradientCreateWithColors(colorSpace, (__bridge CFArrayRef)glossFillColors, glossFillLocations);
-    
+
     // Shadow Declarations
     UIColor* baseShadow = shadowBlack;
     CGSize baseShadowOffset = CGSizeMake(0.1, 6.1);
@@ -1320,46 +1247,46 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
     UIColor* innerShadow = innerShadowColor;
     CGSize innerShadowOffset = CGSizeMake(0.1, 1.1);
     CGFloat innerShadowBlurRadius = 1;
-    
+
     CGFloat backgroundStrokeWidth = 1;
     CGFloat outerStrokeStrokeWidth = 1;
-    
+
     // Frames
     CGRect frame = rect;
     CGRect innerFrame = CGRectMake(frame.origin.x + backgroundStrokeWidth, frame.origin.y + backgroundStrokeWidth, frame.size.width - backgroundStrokeWidth * 2, frame.size.height - backgroundStrokeWidth * 2);
     CGRect glossFrame = CGRectMake(frame.origin.x - backgroundStrokeWidth / 2, frame.origin.y - backgroundStrokeWidth / 2, frame.size.width + backgroundStrokeWidth, frame.size.height / 2 + backgroundStrokeWidth + 0.5);
-    
+
     //// CoreGroup ////
     {
         CGContextSaveGState(context);
         CGContextSetAlpha(context, 0.83);
         CGContextBeginTransparencyLayer(context, NULL);
-        
+
         // Background Drawing
         UIBezierPath* backgroundPath = [UIBezierPath bezierPath];
         [backgroundPath moveToPoint:CGPointMake(CGRectGetMinX(frame), CGRectGetMinY(frame) + radius)];
         [backgroundPath addLineToPoint:CGPointMake(CGRectGetMinX(frame), CGRectGetMaxY(frame) - radius)]; // left
         [backgroundPath addArcWithCenter:CGPointMake(CGRectGetMinX(frame) + radius, CGRectGetMaxY(frame) - radius) radius:radius startAngle:M_PI endAngle:M_PI / 2 clockwise:NO]; // bottom-left corner
-        
+
         // pointer down
         if (!pointingUp) {
             [backgroundPath addLineToPoint:CGPointMake(CGRectGetMinX(anchorRect), CGRectGetMaxY(frame))];
             [backgroundPath addLineToPoint:CGPointMake(CGRectGetMinX(anchorRect) + anchorRect.size.width / 2, CGRectGetMaxY(frame) + anchorRect.size.height)];
             [backgroundPath addLineToPoint:CGPointMake(CGRectGetMaxX(anchorRect), CGRectGetMaxY(frame))];
         }
-        
+
         [backgroundPath addLineToPoint:CGPointMake(CGRectGetMaxX(frame) - radius, CGRectGetMaxY(frame))]; // bottom
         [backgroundPath addArcWithCenter:CGPointMake(CGRectGetMaxX(frame) - radius, CGRectGetMaxY(frame) - radius) radius:radius startAngle:M_PI / 2 endAngle:0.0f clockwise:NO]; // bottom-right corner
         [backgroundPath addLineToPoint: CGPointMake(CGRectGetMaxX(frame), CGRectGetMinY(frame) + radius)]; // right
         [backgroundPath addArcWithCenter:CGPointMake(CGRectGetMaxX(frame) - radius, CGRectGetMinY(frame) + radius) radius:radius startAngle:0.0f endAngle:-M_PI / 2 clockwise:NO]; // top-right corner
-        
+
         // pointer up
         if (pointingUp) {
             [backgroundPath addLineToPoint:CGPointMake(CGRectGetMaxX(anchorRect), CGRectGetMinY(frame))];
             [backgroundPath addLineToPoint:CGPointMake(CGRectGetMinX(anchorRect) + anchorRect.size.width / 2, CGRectGetMinY(frame) - anchorRect.size.height)];
             [backgroundPath addLineToPoint:CGPointMake(CGRectGetMinX(anchorRect), CGRectGetMinY(frame))];
         }
-        
+
         [backgroundPath addLineToPoint:CGPointMake(CGRectGetMinX(frame) + radius, CGRectGetMinY(frame))]; // top
         [backgroundPath addArcWithCenter:CGPointMake(CGRectGetMinX(frame) + radius, CGRectGetMinY(frame) + radius) radius:radius startAngle:-M_PI / 2 endAngle:M_PI clockwise:NO]; // top-left corner
         [backgroundPath closePath];
@@ -1367,16 +1294,16 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
         CGContextSetShadowWithColor(context, baseShadowOffset, baseShadowBlurRadius, baseShadow.CGColor);
         [fillBlack setFill];
         [backgroundPath fill];
-        
+
         // Background Inner Shadow
         CGRect backgroundBorderRect = CGRectInset([backgroundPath bounds], -innerShadowBlurRadius, -innerShadowBlurRadius);
         backgroundBorderRect = CGRectOffset(backgroundBorderRect, -innerShadowOffset.width, -innerShadowOffset.height);
         backgroundBorderRect = CGRectInset(CGRectUnion(backgroundBorderRect, [backgroundPath bounds]), -1, -1);
-        
+
         UIBezierPath* backgroundNegativePath = [UIBezierPath bezierPathWithRect: backgroundBorderRect];
         [backgroundNegativePath appendPath: backgroundPath];
         backgroundNegativePath.usesEvenOddFillRule = YES;
-        
+
         CGContextSaveGState(context);
         {
             CGFloat xOffset = innerShadowOffset.width + round(backgroundBorderRect.size.width);
@@ -1385,7 +1312,7 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
                                         CGSizeMake(xOffset + copysign(0.1, xOffset), yOffset + copysign(0.1, yOffset)),
                                         innerShadowBlurRadius,
                                         innerShadow.CGColor);
-            
+
             [backgroundPath addClip];
             CGAffineTransform transform = CGAffineTransformMakeTranslation(-round(backgroundBorderRect.size.width), 0);
             [backgroundNegativePath applyTransform: transform];
@@ -1393,14 +1320,14 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
             [backgroundNegativePath fill];
         }
         CGContextRestoreGState(context);
-        
+
         CGContextRestoreGState(context);
-        
+
         [strokeColor setStroke];
         backgroundPath.lineWidth = backgroundStrokeWidth;
         [backgroundPath stroke];
-        
-        
+
+
         // Inner Stroke Drawing
         CGFloat innerRadius = radius - 1.0;
         CGRect anchorInnerRect = anchorRect;
@@ -1408,48 +1335,48 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
         anchorInnerRect.origin.y -= backgroundStrokeWidth / 2;
         anchorInnerRect.size.width -= backgroundStrokeWidth;
         anchorInnerRect.size.height -= backgroundStrokeWidth / 2;
-        
+
         UIBezierPath* innerStrokePath = [UIBezierPath bezierPath];
         [innerStrokePath moveToPoint:CGPointMake(CGRectGetMinX(innerFrame), CGRectGetMinY(innerFrame) + innerRadius)];
         [innerStrokePath addLineToPoint:CGPointMake(CGRectGetMinX(innerFrame), CGRectGetMaxY(innerFrame) - innerRadius)]; // left
         [innerStrokePath addArcWithCenter:CGPointMake(CGRectGetMinX(innerFrame) + innerRadius, CGRectGetMaxY(innerFrame) - innerRadius) radius:innerRadius startAngle:M_PI endAngle:M_PI / 2 clockwise:NO]; // bottom-left corner
-        
+
         // pointer down
         if (!pointingUp) {
             [innerStrokePath addLineToPoint:CGPointMake(CGRectGetMinX(anchorInnerRect), CGRectGetMaxY(innerFrame))];
             [innerStrokePath addLineToPoint:CGPointMake(CGRectGetMinX(anchorInnerRect) + anchorInnerRect.size.width / 2, CGRectGetMaxY(innerFrame) + anchorInnerRect.size.height)];
             [innerStrokePath addLineToPoint:CGPointMake(CGRectGetMaxX(anchorInnerRect), CGRectGetMaxY(innerFrame))];
         }
-        
+
         [innerStrokePath addLineToPoint:CGPointMake(CGRectGetMaxX(innerFrame) - innerRadius, CGRectGetMaxY(innerFrame))]; // bottom
         [innerStrokePath addArcWithCenter:CGPointMake(CGRectGetMaxX(innerFrame) - innerRadius, CGRectGetMaxY(innerFrame) - innerRadius) radius:innerRadius startAngle:M_PI / 2 endAngle:0.0f clockwise:NO]; // bottom-right corner
         [innerStrokePath addLineToPoint: CGPointMake(CGRectGetMaxX(innerFrame), CGRectGetMinY(innerFrame) + innerRadius)]; // right
         [innerStrokePath addArcWithCenter:CGPointMake(CGRectGetMaxX(innerFrame) - innerRadius, CGRectGetMinY(innerFrame) + innerRadius) radius:innerRadius startAngle:0.0f endAngle:-M_PI / 2 clockwise:NO]; // top-right corner
-        
+
         // pointer up
         if (pointingUp) {
             [innerStrokePath addLineToPoint:CGPointMake(CGRectGetMaxX(anchorInnerRect), CGRectGetMinY(innerFrame))];
             [innerStrokePath addLineToPoint:CGPointMake(CGRectGetMinX(anchorInnerRect) + anchorRect.size.width / 2, CGRectGetMinY(innerFrame) - anchorInnerRect.size.height)];
             [innerStrokePath addLineToPoint:CGPointMake(CGRectGetMinX(anchorInnerRect), CGRectGetMinY(innerFrame))];
         }
-        
+
         [innerStrokePath addLineToPoint:CGPointMake(CGRectGetMinX(innerFrame) + innerRadius, CGRectGetMinY(innerFrame))]; // top
         [innerStrokePath addArcWithCenter:CGPointMake(CGRectGetMinX(innerFrame) + innerRadius, CGRectGetMinY(innerFrame) + innerRadius) radius:innerRadius startAngle:-M_PI / 2 endAngle:M_PI clockwise:NO]; // top-left corner
         [innerStrokePath closePath];
-        
+
         [innerStrokeColor setStroke];
         innerStrokePath.lineWidth = backgroundStrokeWidth;
         [innerStrokePath stroke];
-        
-        
+
+
         //// GlossGroup ////
         {
             CGContextSaveGState(context);
             CGContextSetAlpha(context, 0.45);
             CGContextBeginTransparencyLayer(context, NULL);
-            
+
             CGFloat glossRadius = radius + 0.5;
-            
+
             // Gloss Drawing
             UIBezierPath* glossPath = [UIBezierPath bezierPath];
             [glossPath moveToPoint:CGPointMake(CGRectGetMinX(glossFrame), CGRectGetMinY(glossFrame))];
@@ -1459,18 +1386,18 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
             [glossPath addArcWithCenter:CGPointMake(CGRectGetMaxX(glossFrame) - glossRadius, CGRectGetMaxY(glossFrame) - glossRadius) radius:glossRadius startAngle:M_PI / 2 endAngle:0.0f clockwise:NO]; // bottom-right corner
             [glossPath addLineToPoint: CGPointMake(CGRectGetMaxX(glossFrame), CGRectGetMinY(glossFrame) - glossRadius)]; // right
             [glossPath addArcWithCenter:CGPointMake(CGRectGetMaxX(glossFrame) - glossRadius, CGRectGetMinY(glossFrame) + glossRadius) radius:glossRadius startAngle:0.0f endAngle:-M_PI / 2 clockwise:NO]; // top-right corner
-            
+
             // pointer up
             if (pointingUp) {
                 [glossPath addLineToPoint:CGPointMake(CGRectGetMaxX(anchorRect), CGRectGetMinY(glossFrame))];
                 [glossPath addLineToPoint:CGPointMake(CGRectGetMinX(anchorRect) + roundf(anchorRect.size.width / 2), CGRectGetMinY(glossFrame) - anchorRect.size.height)];
                 [glossPath addLineToPoint:CGPointMake(CGRectGetMinX(anchorRect), CGRectGetMinY(glossFrame))];
             }
-            
+
             [glossPath addLineToPoint:CGPointMake(CGRectGetMinX(glossFrame) + glossRadius, CGRectGetMinY(glossFrame))]; // top
             [glossPath addArcWithCenter:CGPointMake(CGRectGetMinX(glossFrame) + glossRadius, CGRectGetMinY(glossFrame) + glossRadius) radius:glossRadius startAngle:-M_PI / 2 endAngle:M_PI clockwise:NO]; // top-left corner
             [glossPath closePath];
-            
+
             CGContextSaveGState(context);
             [glossPath addClip];
             CGRect glossBounds = glossPath.bounds;
@@ -1479,51 +1406,51 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
                                         CGPointMake(CGRectGetMidX(glossBounds), CGRectGetMinY(glossBounds)),
                                         0);
             CGContextRestoreGState(context);
-            
+
             CGContextEndTransparencyLayer(context);
             CGContextRestoreGState(context);
         }
-        
+
         CGContextEndTransparencyLayer(context);
         CGContextRestoreGState(context);
     }
-    
+
     // Outer Stroke Drawing
     UIBezierPath* outerStrokePath = [UIBezierPath bezierPath];
     [outerStrokePath moveToPoint:CGPointMake(CGRectGetMinX(frame), CGRectGetMinY(frame) + radius)];
     [outerStrokePath addLineToPoint:CGPointMake(CGRectGetMinX(frame), CGRectGetMaxY(frame) - radius)]; // left
     [outerStrokePath addArcWithCenter:CGPointMake(CGRectGetMinX(frame) + radius, CGRectGetMaxY(frame) - radius) radius:radius startAngle:M_PI endAngle:M_PI / 2 clockwise:NO]; // bottom-left corner
-    
+
     // pointer down
     if (!pointingUp) {
         [outerStrokePath addLineToPoint:CGPointMake(CGRectGetMinX(anchorRect), CGRectGetMaxY(frame))];
         [outerStrokePath addLineToPoint:CGPointMake(CGRectGetMinX(anchorRect) + anchorRect.size.width / 2, CGRectGetMaxY(frame) + anchorRect.size.height)];
         [outerStrokePath addLineToPoint:CGPointMake(CGRectGetMaxX(anchorRect), CGRectGetMaxY(frame))];
     }
-    
+
     [outerStrokePath addLineToPoint:CGPointMake(CGRectGetMaxX(frame) - radius, CGRectGetMaxY(frame))]; // bottom
     [outerStrokePath addArcWithCenter:CGPointMake(CGRectGetMaxX(frame) - radius, CGRectGetMaxY(frame) - radius) radius:radius startAngle:M_PI / 2 endAngle:0.0f clockwise:NO]; // bottom-right corner
     [outerStrokePath addLineToPoint: CGPointMake(CGRectGetMaxX(frame), CGRectGetMinY(frame) + radius)]; // right
     [outerStrokePath addArcWithCenter:CGPointMake(CGRectGetMaxX(frame) - radius, CGRectGetMinY(frame) + radius) radius:radius startAngle:0.0f endAngle:-M_PI / 2 clockwise:NO]; // top-right corner
-    
+
     // pointer up
     if (pointingUp) {
         [outerStrokePath addLineToPoint:CGPointMake(CGRectGetMaxX(anchorRect), CGRectGetMinY(frame))];
         [outerStrokePath addLineToPoint:CGPointMake(CGRectGetMinX(anchorRect) + anchorRect.size.width / 2, CGRectGetMinY(frame) - anchorRect.size.height)];
         [outerStrokePath addLineToPoint:CGPointMake(CGRectGetMinX(anchorRect), CGRectGetMinY(frame))];
     }
-    
+
     [outerStrokePath addLineToPoint:CGPointMake(CGRectGetMinX(frame) + radius, CGRectGetMinY(frame))]; // top
     [outerStrokePath addArcWithCenter:CGPointMake(CGRectGetMinX(frame) + radius, CGRectGetMinY(frame) + radius) radius:radius startAngle:-M_PI / 2 endAngle:M_PI clockwise:NO]; // top-left corner
     [outerStrokePath closePath];
     CGContextSaveGState(context);
     CGContextSetShadowWithColor(context, baseShadowOffset, baseShadowBlurRadius, baseShadow.CGColor);
     CGContextRestoreGState(context);
-    
+
     [outerStrokeColor setStroke];
     outerStrokePath.lineWidth = outerStrokeStrokeWidth;
     [outerStrokePath stroke];
-    
+
     //// Cleanup
     CGGradientRelease(glossFill);
     CGColorSpaceRelease(colorSpace);
